@@ -95,7 +95,7 @@ export default {
       this.perfil = {}
       try {
         const persona = await axios.get(
-          "https://bio.torre.co/api/bios/dariodaza"
+          "https://bio.torre.co/api/bios/felipecastroolivera"
         );
         this.perfil = persona.data;
         console.log(this.perfil);
