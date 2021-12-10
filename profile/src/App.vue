@@ -23,9 +23,9 @@
                 ><b-icon-geo-alt-fill variant="primary"></b-icon-geo-alt-fill>
                 {{ perfil.person.location.name }}</b-card-sub-title
               >
-              <b-card-text class="sumario">
+              <!-- <b-card-text class="sumario">
                 {{ perfil.person.summaryOfBio }}
-              </b-card-text>
+              </b-card-text> -->
 
               <div class="h2 mb-0">
                 <b-link href="#" class="card-link"

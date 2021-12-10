@@ -1,43 +1,158 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex" target="_blank" rel="noopener">vuex</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div>
+    <b-card-group deck class="mb-5">
+      <b-card
+        border-variant="primary"
+        header="Máster"
+        header-bg-variant="primary"
+        header-text-variant="white"
+        align="center"
+      >
+        <b-card-text>
+          <b-list-group v-for="habilidad in masters" :key="habilidad">
+            <p>{{ habilidad }}</p>
+          </b-list-group>
+        </b-card-text>
+      </b-card>
+
+      <b-card
+        border-variant="info"
+        header="Experto"
+        header-bg-variant="info"
+        header-text-variant="white"
+        align="center"
+      >
+        <b-card-text
+          ><b-list-group v-for="habilidad in expert" :key="habilidad">
+            <p>{{ habilidad }}</p>
+          </b-list-group></b-card-text
+        >
+      </b-card>
+
+      <b-card
+        border-variant="warning"
+        header="Competente"
+        header-bg-variant="warning"
+        header-text-variant="white"
+        align="center"
+      >
+        <b-card-text
+          ><b-list-group v-for="habilidad in proficient" :key="habilidad">
+            <p>{{ habilidad }}</p>
+          </b-list-group></b-card-text
+        >
+      </b-card>
+      <b-card
+        border-variant="primary"
+        header="Novato"
+        header-bg-variant="primary"
+        header-text-variant="white"
+        align="center"
+      >
+        <b-card-text
+          ><b-list-group v-for="habilidad in novice" :key="habilidad">
+            <p>{{ habilidad }}</p>
+          </b-list-group></b-card-text
+        >
+      </b-card>
+      <!-- <b-card
+        border-variant="danger"
+        header="Me gustaría conocer"
+        header-bg-variant="danger"
+        header-text-variant="white"
+        align="center"
+      >
+        <b-card-text
+          >Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text
+        >
+      </b-card> -->
+    </b-card-group>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
-}
+  name: "Conocimientos",
+  data() {
+    return {
+      perfil: {},
+      masters: [],
+      expert: [],
+      proficient: [],
+      novice: [],
+      status: 0
+    }
+  },
+  methods: {
+    async buscarPerfil() {
+      console.log("BUSCANDO PERFIL");
+      this.perfil = {}
+      try {
+        const persona = await axios.get(
+          "https://bio.torre.co/api/bios/felipecastroolivera"
+        );
+        this.perfil = persona.data;
+        this.status = persona.status;
+        console.log(this.status);
+        console.log(this.perfil);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    habilidades(){
+      // console.log("Dentro de habilidades");
+      var habilidades =  [];
+      habilidades = this.perfil.strengths;
+
+      for (const i in habilidades) {
+        if (habilidades[i].proficiency == "master" ) {
+          var master = habilidades[i].name
+          this.masters.push(master)
+        }
+      }
+
+      for (const i in habilidades) {
+        if (habilidades[i].proficiency == "expert" ) {
+          var habilidad = habilidades[i].name
+          this.expert.push(habilidad)
+        }
+      }
+
+      for (const i in habilidades) {
+        if (habilidades[i].proficiency == "proficient" ) {
+          var habilidad = habilidades[i].name
+          this.proficient.push(habilidad)
+        }
+      }
+
+      for (const i in habilidades) {
+        if (habilidades[i].proficiency == "novice" ) {
+          var habilidad = habilidades[i].name
+          this.novice.push(habilidad)
+        }
+      }
+
+      // for (const i in habilidades) {
+      //   if (habilidades[i].proficiency == "no-experience-interested" ) {
+      //     var habilidad = habilidades[i].name
+      //     this.masters.push(habilidad)
+      //   }
+      // }
+    }
+  },
+  watch: {
+    status() {
+      if (this.status === 200) {
+        this.habilidades()
+      }
+    }
+  },
+  mounted() {
+    this.buscarPerfil();
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
